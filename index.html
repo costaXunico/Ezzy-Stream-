@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Stream Activity</title>
+</head>
+<body>
+    <h1>Transmissão de Tela na Activity</h1>
+    <button id="shareBtn">Compartilhar Tela</button>
+    
+    <div style="margin-top: 20px;">
+        <video id="localVideo" autoplay playsinline muted style="width: 400px; border: 1px solid #ccc;"></video>
+    </div>
+
+    <!-- SDK do Discord -->
+    <script src="https://unpkg.com/@discord/embedded-app-sdk@1.0.0/dist/index.js"></script>
+    <script>
+        let discordSdk;
+
+        async function setupDiscordSdk() {
+            discordSdk = new DiscordSDK.DiscordSDK({
+                clientId: "SEU_CLIENT_ID_DO_DISCORD"
+            });
+            await discordSdk.ready();
+            console.log("Discord SDK conectado!");
+        }
+        setupDiscordSdk();
+
+        // Lógica de captura de tela nativa do navegador
+        document.getElementById('shareBtn').addEventListener('click', async () => {
+            try {
+                // Abre o seletor de janelas/abas/telas do navegador
+                const stream = await navigator.mediaDevices.getDisplayMedia({
+                    video: { cursor: "always" },
+                    audio: true
+                });
+
+                const videoElement = document.getElementById('localVideo');
+                videoElement.srcObject = stream;
+
+                // Aqui você integraria o 'stream' com WebRTC (RTCPeerConnection) 
+                // para enviar os tracks de vídeo/áudio para os outros usuários na sala.
+                
+            } catch (error) {
+                console.error("Erro ao tentar capturar a tela:", error);
+            }
+        });
+    </script>
+</body>
+</html>
