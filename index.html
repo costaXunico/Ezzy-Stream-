@@ -2,49 +2,106 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Stream Activity</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ezzy Stream - Transmissão</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Transmissão de Tela na Activity</h1>
-    <button id="shareBtn">Compartilhar Tela</button>
-    
-    <div style="margin-top: 20px;">
-        <video id="localVideo" autoplay playsinline muted style="width: 400px; border: 1px solid #ccc;"></video>
+
+    <div class="stream-container">
+        <!-- Cabeçalho -->
+        <header class="stream-header">
+            <span class="badge-transmissao">TRANSMISSÃO</span>
+            <h1>Prepare sua transmissão.</h1>
+            <p>Escolha a qualidade, confira a prévia e entre ao vivo quando estiver tudo certo.</p>
+        </header>
+
+        <!-- Card Principal -->
+        <main class="stream-card">
+            <div class="card-header">
+                <span class="dot"></span>
+                <span class="source-title">FONTE PRINCIPAL</span>
+            </div>
+
+            <h2>Compartilhar tela</h2>
+
+            <!-- Controles de Configuração -->
+            <div class="controls-grid">
+                <div class="control-group">
+                    <label for="presetSelect">Preset</label>
+                    <div class="select-wrapper">
+                        <select id="presetSelect">
+                            <option value="manual">Manual</option>
+                            <option value="high">Alta Qualidade (1080p 60fps)</option>
+                            <option value="eco">Economia de Banda (720p 30fps)</option>
+                        </select>
+                        <span class="select-arrow">▼</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label for="resolutionSelect">Resolução</label>
+                    <div class="select-wrapper">
+                        <select id="resolutionSelect">
+                            <option value="1080">Full HD (1080p)</option>
+                            <option value="720">HD (720p)</option>
+                            <option value="480">SD (480p)</option>
+                        </select>
+                        <span class="select-arrow">▼</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label for="bandwidthSelect">Largura de banda</label>
+                    <div class="select-wrapper">
+                        <select id="bandwidthSelect">
+                            <option value="medium">Médio — ~2 Mb</option>
+                            <option value="high">Alto — ~5 Mb</option>
+                            <option value="low">Baixo — ~1 Mb</option>
+                        </select>
+                        <span class="select-arrow">▼</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label for="fpsSelect">Taxa de atualização</label>
+                    <div class="select-wrapper">
+                        <select id="fpsSelect">
+                            <option value="30">30 fps</option>
+                            <option value="60">60 fps</option>
+                        </select>
+                        <span class="select-arrow">▼</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botão Principal de Ação -->
+            <button id="shareBtn" class="btn-share">
+                <span class="icon-monitor">🖥️</span>
+                <span id="shareBtnText">Selecionar tela</span>
+            </button>
+
+            <!-- Área de Prévia e Status -->
+            <div class="preview-container">
+                <div id="previewPlaceholder" class="preview-placeholder">
+                    A prévia aparece aqui
+                </div>
+                <video id="liveVideo" autoplay playsinline muted style="display: none;"></video>
+                
+                <div id="liveStats" class="live-stats" style="display: none;">
+                    <div class="stat-badge live-indicator">🔴 AO VIVO</div>
+                    <div class="stat-badge" id="streamTimer">00:00:00</div>
+                    <div class="stat-badge" id="bitrateIndicator">~2.1 Mb/s</div>
+                </div>
+            </div>
+        </main>
     </div>
 
-    <!-- SDK do Discord -->
-    <script src="https://unpkg.com/@discord/embedded-app-sdk@1.0.0/dist/index.js"></script>
-    <script>
-        let discordSdk;
+    <!-- Notificação Toast -->
+    <div id="toast" class="toast"></div>
 
-        async function setupDiscordSdk() {
-            discordSdk = new DiscordSDK.DiscordSDK({
-                clientId: "SEU_CLIENT_ID_DO_DISCORD"
-            });
-            await discordSdk.ready();
-            console.log("Discord SDK conectado!");
-        }
-        setupDiscordSdk();
-
-        // Lógica de captura de tela nativa do navegador
-        document.getElementById('shareBtn').addEventListener('click', async () => {
-            try {
-                // Abre o seletor de janelas/abas/telas do navegador
-                const stream = await navigator.mediaDevices.getDisplayMedia({
-                    video: { cursor: "always" },
-                    audio: true
-                });
-
-                const videoElement = document.getElementById('localVideo');
-                videoElement.srcObject = stream;
-
-                // Aqui você integraria o 'stream' com WebRTC (RTCPeerConnection) 
-                // para enviar os tracks de vídeo/áudio para os outros usuários na sala.
-                
-            } catch (error) {
-                console.error("Erro ao tentar capturar a tela:", error);
-            }
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
